@@ -3,6 +3,8 @@ process-folder
 
 Loop recursively over files in a folder, pipe them to stdin of a command and write the output to a target folder.
 
+[![Travis](http://img.shields.io/travis/binocarlos/process-folder.svg?style=flat)](https://travis-ci.org/binocarlos/process-folder)
+
 ## install
 
 ```
@@ -39,6 +41,7 @@ processor.run(function(err){
 The above example will load all `.jsx` files from `__dirname + '/fixtures/src'` and pipe them via a `mercury-jsx`.
 
 The results of each file will be written to `__dirname + '/fixtures/build'` with the .jsx suffix replaced with .js
+
 
 ## license
 
