@@ -6,7 +6,7 @@ var cp = require('child_process')
 var mkdirp = require('mkdirp')
 var ls = require('ls-r')
 
-var requiredOpts = ['source', 'target', 'command']
+var requiredOpts = ['source', 'dest', 'command']
 
 function FolderProcessor(opts){
 	var self = this;
@@ -24,17 +24,21 @@ function FolderProcessor(opts){
 util.inherits(FolderProcessor, EventEmitter)
 
 FolderProcessor.prototype.convertFile = function(source, target, done){
+	var self = this;
 	var dirname = path.dirname(target)
 	mkdirp(dirname, function(){
 		var inFile = fs.createReadStream(source)
 		var outFile = fs.createWriteStream(target)
 
 		var proc = cp.spawn(self.opts.command, self.opts.args || [], {
-			stdio:[inFile, outFile, 'inherit']
+			stdio:['pipe', 'pipe', process.stderr]
 		})
 
+		inFile.pipe(proc.stdin)
+		proc.stdout.pipe(outFile)
+
 		proc.on('error', done)
-		proc.on('done', done)	
+		proc.on('close', done)	
 	})
 }
 
@@ -49,11 +53,11 @@ FolderProcessor.prototype.run = function(done){
 		function nextFile(err){
 			if(err) return done(err)
 			if(files.length<=0){
-				done()
+				return done()
 			}
 
 			var file = files.shift()
-			var target = file.replace(self.opts.source, self.opts.target)
+			var target = file.replace(self.opts.source, self.opts.dest)
 
 			target = self.opts.rename ? self.opts.rename(target) : target
 

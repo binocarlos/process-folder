@@ -25,6 +25,11 @@
   "homepage": "https://github.com/binocarlos/process-folder",
   "devDependencies": {
     "mercury-jsx": "^0.1.3",
-    "tape": "^3.0.1"
+    "tape": "^3.0.1",
+    "wrench": "^1.5.8"
+  },
+  "dependencies": {
+    "ls-r": "^0.2.1",
+    "mkdirp": "^0.5.0"
   }
 }
